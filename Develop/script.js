@@ -1,7 +1,12 @@
 // Assignment code here
 
+var upperLetters = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
+var lowerLetters = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
+var numericValue = ["1","2","3","4","5","6","7","8","9","0"];
+var specialChar = ["!","@","$","%","&","(",")","?","/","+","=","~","*","#"];
+
 var pwCriteria = {
-  length: "",
+  length: 0,
   lowercase: "",
   uppercase: "",
   numeric: "",
@@ -10,49 +15,57 @@ var pwCriteria = {
 
 var characterSelection = function (){
 
-  //Lowercase letters option prompt
-  pwCriteria.lowercase=window.prompt("Would you like to include lowercase characters in your password? Type yes or no ");
-  pwCriteria.lowercase = pwCriteria.lowercase.toLowerCase();
-  if (pwCriteria.lowercase === "yes") {
-      window.alert("You have selected to include lowercase letters in your password");
-      pwCriteria.lowercase=true;
-  } else if(pwCriteria.lowercase === "no") {
-      window.alert("You selected to not use lowercase letters in your password.");
-      pwCriteria.lowercase=false;
+  //Length of password prompt
+  pwCriteria.length=parseInt(window.prompt("Select a value between 8 and 128"));
+  if (Number.isNaN(pwCriteria.length)) {
+    window.alert("This is not a number")
+    return;
+  }  else {
+    window.alert("This is a number");
+    if(pwCriteria.length >= 8 && pwCriteria.length <= 128) {
+    window.alert("You've met the criteria")
+    } else {
+      window.alert("You have not met the criteria")
+      return;
+    }
+  } 
+
+//Lowercase option prompt
+  pwCriteria.lowercase=window.confirm("Would you like to include lowercase letters in your password");
+  if(pwCriteria.lowercase == true) {
+    window.alert("You have selected to include lowercase letters in your password");
+  } else { 
+    window.alert("You selected to not use lowercase letters in your password.");
+
   }
 
-  //Uppercase letters prompt
-  pwCriteria.uppercase=window.prompt("Would you like to include uppercase letters in your password? Type yes or no");
-  pwCriteria.uppercase=pwCriteria.uppercase.toLowerCase();
-  if(pwCriteria.uppercase === "yes") {
-    window.alert("You have selected to use uppercase letters in your password");
-    pwCriteria.uppercase=true;
-  } else if(pwCriteria.uppercase === "no") {
-    window.alert("You have selected to not use uppercase letters in your password");
-    pwCriteria.uppercase=false;
+  //Uppercase option prompt
+  pwCriteria.uppercase=window.confirm("Would you like to include uppercase letters in your password");
+  if(pwCriteria.uppercase == true) {
+    window.alert("You have selected to include uppercase letters in your password");
+  } else { 
+    window.alert("You selected to not use uppercase letters in your password.");
+
   }
 
-  //Numeric characters prompt
-  pwCriteria.numeric=window.prompt("Would you like to include numeric values in your password? Type yes or no");
-  pwCriteria.numeric=pwCriteria.numeric.toLowerCase();
-  if(pwCriteria.numeric === "yes") {
+  //Numeric character prompt
+  pwCriteria.numeric=window.confirm("Would you like to include numeric values in your password");
+  if(pwCriteria.numeric == true) {
     window.alert("You have selected to include numeric values in your password");
-    pwCriteria.numeric=true;
-  }else if(pwCriteria.numeric === "no") {
-    window.alert("You have selected to not include numeric values in your password.");
-    pwCriteria.numeric=false;
+  } else { 
+    window.alert("You selected to not use numeric values in your password.");
+
   }
 
   //Special characters prompt
-  pwCriteria.spCharacters=window.prompt("Would you like to include special characters in your password? Type yes or no");
-  pwCriteria.spCharacters=pwCriteria.spCharacters.toLowerCase();
-  if(pwCriteria.spCharacters === "yes") {
-    window.alert("You have selected to use special characters in your password.");
-    pwCriteria.spCharacters=true;
-  } else if(pwCriteria.spCharacters === "no") {
-    window.alert("You have selected to not use special characters in your password.");
-    pwCriteria=false;
+  pwCriteria.spCharacters=window.confirm("Would you like to include special characters in your password");
+  if(pwCriteria.spCharacters == true) {
+    window.alert("You have selected to include special characters in your password");
+  } else { 
+    window.alert("You selected to not use special characters in your password.");
+
   }
+  
   //If none of the options are selected
   if(pwCriteria.lowercase === false &&
       pwCriteria.uppercase === false &&
@@ -64,6 +77,33 @@ var characterSelection = function (){
 };
 
 
+function generatePassword() {
+  characterSelection();
+  var password="";
+  var randomArray= []
+  if (pwCriteria.lowercase === true) {
+    randomArray=randomArray.concat(lowerLetters);
+  }
+  if (pwCriteria.uppercase === true) {
+    randomArray=randomArray.concat(upperLetters);
+  }
+  if (pwCriteria.numeric === true) {
+    randomArray=randomArray.concat(numericValue);
+  }
+  if (pwCriteria.spCharacters === true) {
+    randomArray=randomArray.concat(specialChar);
+  }
+  
+  for(var i=0; i<pwCriteria.length; i++) { 
+    var randomPosition=Math.floor(Math.random() * randomArray.length)
+    var element = randomArray[randomPosition];
+    password=element+password
+    
+  }
+  console.log(password)
+  return password;
+}
+
 // Get references to the #generate element
 var generateBtn = document.querySelector("#generate");
 
@@ -72,7 +112,7 @@ var generateBtn = document.querySelector("#generate");
 function writePassword() {
   var password = generatePassword();
   var passwordText = document.querySelector("#password");
-
+  
   passwordText.value = password;
 
 }
